@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecast - Gestión de Tareas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./tasks.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="forecast-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h1>Tasks</h1>
+            </div>
+            <div class="nav-section calendar-filter" id="calendarFilter">
+                <!-- Los elementos se llenarán dinámicamente con JS -->
+            </div>
+            <div class="nav-section">
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-inbox">
+                        <i class="fas fa-inbox"></i>
+                    </div>
+                    <div class="nav-content">Inbox</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-flagged">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="nav-content">Flagged</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-nearby">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="nav-content">Nearby</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-tags">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <div class="nav-content">Tags</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-projects">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="nav-content">Projects</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-review">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="nav-content">Review</div>
+                </div>
+            </div>
+
+            <div class="section-title">Other Perspectives</div>
+            <div class="nav-section filter-modes">
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-completed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="nav-content">Completed</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-changed">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="nav-content">Changed</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-chores">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <div class="nav-content">Chores</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-duration">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="nav-content">Duration</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-today2">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="nav-content">Today</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-travel">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <div class="nav-content">Travel</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon nav-bg-workdesk">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="nav-content">Work-Desk</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Forecast</h1>
+                    <div class="header-subtitle">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="taskCount">Cargando tareas...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingState">
+                <div class="spinner"></div>
+                Cargando datos desde la base de datos...
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section" id="progressSection" style="display: none;">
+                <div class="progress-header">
+                    <div class="progress-title">
+                        <div class="progress-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        Progreso de Tareas
+                    </div>
+                    <div class="progress-stats">
+                        <span id="completedCount">0</span> de <span id="totalCount">0</span> completadas
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-details">
+                    <div class="progress-percentage" id="progressPercentage">0% completado</div>
+                    <div class="progress-time" id="progressTime">Actualizado hace un momento</div>
+                </div>
+            </div>
+
+            <!-- Tasks Section -->
+            <div class="tasks-section" id="tasksSection" style="display: none;">
+                <div class="tasks-header">
+                    <h2 class="tasks-title">Tareas Pendientes</h2>
+                    <div class="tasks-controls">
+                        <button class="btn btn-secondary" id="filterBtn">
+                            <i class="fas fa-filter"></i>
+                            Filtrar
+                        </button>
+                        <button class="btn btn-primary" id="addTaskBtn">
+                            <i class="fas fa-plus"></i>
+                            Nueva Tarea
+                        </button>
+                    </div>
+                </div>
+                <div class="tasks-grid" id="tasksGrid">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Bottom Navigation -->
+        <div class="mobile-bottom-bar">
+            <div class="mobile-nav">
+                <a href="#" class="mobile-nav-item active">
+                    <div class="mobile-nav-icon"><i class="fas fa-home"></i></div>
+                    Home
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <div class="mobile-nav-icon"><i class="fas fa-edit"></i></div>
+                    Edit
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <div class="mobile-nav-icon"><i class="fas fa-users"></i></div>
+                    People
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <div class="mobile-nav-icon"><i class="fas fa-chart-bar"></i></div>
+                    Stats
+                </a>
+                <a href="#" class="mobile-nav-item">
+                    <div class="mobile-nav-icon"><i class="fas fa-cog"></i></div>
+                    Config
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./tasks.js"></script>
+        
+    </script>
+</body>
+</html>
